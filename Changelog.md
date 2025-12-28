@@ -90,3 +90,7 @@ public headers, core implementations, and manual pages.
   Copyright (c) 2025 Hyperbola Project”.
 - The codebase is largely based on OpenBSD 7.0 libc sources,
   adapted for portability/compat usage.
+
+---
+
+[1.0.0]: https://git.hyperbola.info:50100/hyperbolabsd/libbsdcompat.git/tag/?h=v1.0.0
