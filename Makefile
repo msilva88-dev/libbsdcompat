@@ -624,14 +624,12 @@ esac \
 LIBBSDCOMPAT_GETGRLIST_MAN_CMD != sh -c '\
 case "$(ENABLE_GETGRLIST)" in \
     true) \
-        case "$(ENABLE_YP)" in \
-            true) \
-                printf "%s" "getgrouplist.3" \
-                ;; \
-            false|*) \
-                printf "%s" "" \
-                ;; \
-        esac \
+        if [ "$(ENABLE_GETGRENT)" = "true" ] && [ "$(ENABLE_YP)" = "true" ]; \
+        then \
+            printf "%s" "getgrouplist.3"; \
+        else \
+            printf "%s" ""; \
+        fi \
         ;; \
     false|*) \
         printf "%s" "" \
@@ -664,14 +662,12 @@ LIBBSDCOMPAT_MANS += $(LIBBSDCOMPAT_TTYNAME_MAN_CMD)
 PORTABLE_STRTONUM_INT_OBJ_CMD != sh -c '\
 case "$(ENABLE_GETGRLIST)" in \
     true) \
-        case "$(ENABLE_YP)" in \
-            true) \
-                printf "%s" "$(BUILDDIR)/portable/strtonum_int.o" \
-                ;; \
-            false|*) \
-                printf "%s" "" \
-                ;; \
-        esac \
+        if [ "$(ENABLE_GETGRENT)" = "true" ] && [ "$(ENABLE_YP)" = "true" ]; \
+        then \
+            printf "%s" "$(BUILDDIR)/portable/strtonum_int.o"; \
+        else \
+            printf "%s" ""; \
+        fi \
         ;; \
     false|*) \
         printf "%s" "" \
@@ -733,14 +729,12 @@ esac \
 LIBBSDCOMPAT_GETGRLIST_OBJ_CMD != sh -c '\
 case "$(ENABLE_GETGRLIST)" in \
     true) \
-        case "$(ENABLE_YP)" in \
-            true) \
-                printf "%s" "$(BUILDDIR)/getgrouplist.o" \
-                ;; \
-            false|*) \
-                printf "%s" "" \
-                ;; \
-        esac \
+        if [ "$(ENABLE_GETGRENT)" = "true" ] && [ "$(ENABLE_YP)" = "true" ]; \
+        then \
+            printf "%s" "$(BUILDDIR)/getgrouplist.o"; \
+        else \
+            printf "%s" ""; \
+        fi \
         ;; \
     false|*) \
         printf "%s" "" \
