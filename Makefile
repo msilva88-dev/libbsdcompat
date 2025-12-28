@@ -481,6 +481,20 @@ case "$(ENABLE_BSDDB)" in \
         ;; \
 esac \
 ' 2>/dev/null
+LNK_LDFLAG_GETGRENT_CMD != sh -c '\
+if [ "$(ENABLE_GETGRENT)" = "true" ] && [ "$(ENABLE_YP)" = "true" ]; then \
+    case "$(CHOST)" in \
+        *-musl*|*-hyperbolabsd*) \
+            printf "%s%s" "" "" \
+            ;; \
+        *-gnu*|*bsd*|*) \
+            printf "%s%s" "-l" "pthread" \
+            ;; \
+    esac; \
+else \
+    printf "%s%s" "" ""; \
+fi \
+' 2>/dev/null
 LNK_LDFLAG_YP_CMD != sh -c '\
 case "$(ENABLE_YP)" in \
     true) \
@@ -491,7 +505,8 @@ case "$(ENABLE_YP)" in \
         ;; \
 esac \
 ' 2>/dev/null
-LNK_LDFLAGS := $(LNK_LDFLAG_BSDDB_CMD) $(LNK_LDFLAG_YP_CMD)
+LNK_LDFLAGS := $(LNK_LDFLAG_BSDDB_CMD) $(LNK_LDFLAG_GETGRENT_CMD)
+LNK_LDFLAGS += $(LNK_LDFLAG_YP_CMD)
 
 # Linker Flags for shared code
 DFT_SHAREDLDFLAGS := -shared
@@ -811,11 +826,11 @@ $(BUILDDIR)/libbsdcompat.a: $(LIBBSDCOMPAT_OBJS) $(PORTABLE_OBJS)
 $(BUILDDIR)/libbsdcompat.so: $(LIBBSDCOMPAT_OBJS) $(PORTABLE_OBJS)
 	if [ "$(BUILD_PORTABLE_CMD)" = "true" ]; then \
 	    "$(CC)" $(LDFLAGS) $(DFT_SHAREDLDFLAGS) \
-	      -o "$(BUILDDIR)/libbsdcompat.so" $? $(LNK_LDFLAGS) -lpthread; \
+	      -o "$(BUILDDIR)/libbsdcompat.so" $? $(LNK_LDFLAGS); \
 	else \
 	    "$(CC)" $(LDFLAGS) $(DFT_SHAREDLDFLAGS) \
 	      -o "$(BUILDDIR)/libbsdcompat.so" \
-	      $(LIBBSDCOMPAT_OBJS) $(LNK_LDFLAGS) -lpthread; \
+	      $(LIBBSDCOMPAT_OBJS) $(LNK_LDFLAGS); \
 	fi
 $(BUILDDIR)/libbsdcompat.pc: libbsdcompat.pc.in
 	if [ "$(ENABLE_DYNAMIC)" = "true" ] \
